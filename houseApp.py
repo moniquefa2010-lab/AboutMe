@@ -144,33 +144,12 @@ st.subheader("Insights")
 
 highest_rent = filtered.loc[filtered["rent"].idxmax()]
 least_affordable = filtered.loc[filtered["affordability"].idxmax()]
-lowest_affordable = filtered.loc[filtered["affordability"].idxmin()]
+most_affordable = filtered.loc[filtered["affordability"].idxmin()]
 
-st.write(
-    f"Highest rent observed: {highest_rent['state']} in {int(highest_rent['year'])} "
-    f"with rent of ${highest_rent['rent']:,.2f}."
-)
+corr = filtered["rent"].corr(filtered["hpi"])
 
-st.write(
-    f"Least affordable selected state/year: {least_affordable['state']} in "
-    f"{int(least_affordable['year'])}, where rent was highest relative to the housing price index."
-)
-
-st.write(
-    f"Most affordable selected state/year: {lowest_affordable['state']} in "
-    f"{int(lowest_affordable['year'])}, where rent was lower relative to the housing price index."
-)
-
-if corr > 0:
-    st.write(
-        f"The correlation value of {corr:.2f} shows a positive relationship between rent and HPI. "
-        "This means that as housing prices increase, rent generally tends to increase too."
-    )
-else:
-    st.write(
-        f"The correlation value of {corr:.2f} shows a weak or negative relationship between rent and HPI."
-    )
-
-st.write(
-    "Overall, this dashboard helps compare how rent, housing prices, and affordability change across states over time."
-)
+st.write(f"Highest rent: {highest_rent['state']} ({int(highest_rent['year'])}) — ${highest_rent['rent']:,.0f}")
+st.write(f"Least affordable: {least_affordable['state']} ({int(least_affordable['year'])})")
+st.write(f"Most affordable: {most_affordable['state']} ({int(most_affordable['year'])})")
+st.write(f"Rent and HPI are positively correlated ({corr:.2f}), meaning they rise together.")
+st.write("Overall: shows how rent, prices, and affordability change over time.")
