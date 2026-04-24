@@ -8,7 +8,7 @@ st.set_page_config(page_title="HousingPulse Dashboard", layout="wide")
 st.title("HousingPulse: U.S. Rent & Housing Affordability Analysis")
 st.write("This dashboard analyzes the relationship between rent, housing prices, and affordability across U.S. states over time.")
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=5)
 def load_data():
     url = "https://docs.google.com/spreadsheets/d/1qzakLa-HyV-0JMFknycrUqQbrG88vMdIC8MVSQN-Fng/export?format=csv&gid=1925372574"
     df = pd.read_csv(url)
