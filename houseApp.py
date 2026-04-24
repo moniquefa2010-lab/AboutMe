@@ -63,6 +63,9 @@ with col3:
 st.subheader("Data Preview")
 st.dataframe(filtered)
 
+years = sorted(filtered["year"].unique())
+tick_years = years[::2]
+
 st.subheader("Rent Trend Over Time")
 
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -74,6 +77,7 @@ for state in selected_states:
 ax.set_xlabel("Year")
 ax.set_ylabel("Rent ($)")
 ax.set_title("Rent Trend Over Time")
+ax.set_xticks(tick_years)
 ax.legend()
 ax.grid(True)
 
@@ -90,6 +94,7 @@ for state in selected_states:
 ax.set_xlabel("Year")
 ax.set_ylabel("Housing Price Index")
 ax.set_title("Housing Price Index Trend Over Time")
+ax.set_xticks(tick_years)
 ax.legend()
 ax.grid(True)
 
@@ -106,6 +111,7 @@ for state in selected_states:
 ax.set_xlabel("Year")
 ax.set_ylabel("Affordability Ratio")
 ax.set_title("Affordability Trend Over Time")
+ax.set_xticks(tick_years)
 ax.legend()
 ax.grid(True)
 
