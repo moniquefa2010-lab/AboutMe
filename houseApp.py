@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="HousingPulse Dashboard", layout="wide")
 
 st.title("HousingPulse Dashboard")
-st.write("Compare rent and housing prices across U.S. states.")
+st.write("Compare rent and housing prices across U.S. states over time.")
 
-# LIVE merged dataset load (Google Sheets)
+# Load LIVE data from Google Sheets
 @st.cache_data(ttl=600)
 def load_data():
     url = "https://docs.google.com/spreadsheets/d/1qzakLa-HyV-0JMFknycrUqQbrG88vMdIC8MVSQN-Fng/export?format=csv&gid=1925372574"
@@ -16,11 +16,12 @@ def load_data():
 
 df = load_data()
 
-# Clean just in case
+# Clean data
 df["state"] = df["state"].astype(str).str.strip().str.upper()
 df["year"] = pd.to_numeric(df["year"], errors="coerce")
 df["rent"] = pd.to_numeric(df["rent"], errors="coerce")
 df["hpi"] = pd.to_numeric(df["hpi"], errors="coerce")
+df["affordability"] = pd.to_numeric(df["affordability"], errors="coerce")
 
 df = df.dropna()
 
@@ -49,7 +50,7 @@ if filtered.empty:
     st.warning("Select at least one state.")
     st.stop()
 
-# Summary
+# Summary metrics
 st.subheader("Summary Metrics")
 col1, col2, col3 = st.columns(3)
 
@@ -61,41 +62,50 @@ with col2:
 
 with col3:
     corr = filtered["rent"].corr(filtered["hpi"])
-    st.metric("Correlation", f"{corr:.2f}")
+    st.metric("Correlation (Rent vs HPI)", f"{corr:.2f}")
 
-# Data
+# Data preview
 st.subheader("Data Preview")
 st.dataframe(filtered)
 
-# Rent Trend (TIME COMPONENT)
+# Rent Trend (YEAR ON X-AXIS)
 st.subheader("Rent Trend Over Time")
+
 rent_chart = filtered.pivot(index="year", columns="state", values="rent")
 st.line_chart(rent_chart)
 
 # HPI Trend
 st.subheader("Housing Price Index Trend")
+
 hpi_chart = filtered.pivot(index="year", columns="state", values="hpi")
 st.line_chart(hpi_chart)
 
-# Scatter
+# Scatter plot
 st.subheader("Rent vs Housing Price Index")
 
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots()
 ax.scatter(filtered["hpi"], filtered["rent"])
 
-ax.set_xlabel("Housing Price Index")
-ax.set_ylabel("Rent")
-ax.set_title("HPI vs Rent")
-ax.grid(True)
+ax.set_xlabel("Housing Price Index (HPI)")
+ax.set_ylabel("Rent ($)")
+ax.set_title("Relationship Between Rent and HPI")
 
 st.pyplot(fig)
 
 # Insights
 st.subheader("Insights")
 
-highest = filtered.loc[filtered["rent"].idxmax()]
+highest_rent = filtered.loc[filtered["rent"].idxmax()]
 least_affordable = filtered.loc[filtered["affordability"].idxmax()]
 
-st.write(f"Highest rent: {highest['state']} in {int(highest['year'])}")
-st.write(f"Least affordable: {least_affordable['state']} in {int(least_affordable['year'])}")
-st.write("Higher affordability = rent is high relative to housing prices.")
+st.write(
+    f"Highest rent observed in {highest_rent['state']} during {int(highest_rent['year'])}."
+)
+
+st.write(
+    f"{least_affordable['state']} is the least affordable based on rent-to-HPI ratio."
+)
+
+st.write(
+    "Overall, rent and housing prices tend to move together, as shown by the positive correlation."
+)
