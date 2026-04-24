@@ -50,6 +50,7 @@ if filtered.empty:
 
 st.subheader("Summary Metrics")
 col1, col2, col3 = st.columns(3)
+st.caption("Rent is in USD ($). HPI is an index (base = 100), not a dollar value.")
 
 with col1:
     st.metric("Average Rent", f"${filtered['rent'].mean():,.2f}")
