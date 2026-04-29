@@ -185,8 +185,8 @@ These rankings use the most recent selected year to compare states by affordabil
 Lower affordability ratio means the state is more affordable.
 """)
 
-latest_year = filtered["year"].max()
-latest_data = filtered[filtered["year"] == latest_year]
+latest_year = df["year"].max()
+latest_data = df[df["year"] == latest_year]
 
 most_affordable_ranked = latest_data.sort_values(by="affordability").head(5)
 least_affordable_ranked = latest_data.sort_values(by="affordability", ascending=False).head(5)
