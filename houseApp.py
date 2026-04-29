@@ -8,7 +8,11 @@ st.set_page_config(page_title="HousingPulse Dashboard", layout="wide")
 
 #App title and purpose
 st.title("HousingPulse: U.S. Rent & Housing Affordability Analysis")
-st.write("This dashboard analyzes the relationship between rent, housing prices, and affordability across U.S. states over time.")
+st.write("""
+This dashboard analyzes the relationship between rent, housing prices, and affordability 
+across U.S. states over time. It helps users compare trends and identify where affordability 
+pressure is highest.
+""")
 
 #Load Live Google Sheets Data
 @st.cache_data(ttl=5)
@@ -80,7 +84,7 @@ st.caption("💡 Rent is in USD ($). HPI is an index with base = 100, not a doll
 #Data preview
 st.subheader("Data Preview")
 st.write("This table shows the filtered data used in the dashboard.")
-st.dataframe(filtered)
+st.dataframe(filtered.round(2))
 
 #Prepare x-axis year ticks
 years = sorted(filtered["year"].unique())
