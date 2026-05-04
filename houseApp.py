@@ -98,7 +98,7 @@ fig, ax = plt.subplots(figsize=(10, 6))
 
 for state in selected_states:
     state_data = filtered[filtered["state"] == state].sort_values("year")
-    ax.plot(state_data["year"], state_data["hpi"], marker="o", label=state)
+    ax.plot(state_data["year"], state_data["rent"], marker="o", label=state)
 
 ax.set_xlabel("Year")
 ax.set_ylabel("Rent ($)")
